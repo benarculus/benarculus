@@ -1,14 +1,14 @@
 :wave:
 ### About Me:
 - **Current job:** Customer Success Architect at GitHub
-  - **What does that mean?** I'm a technical leader for a portfolio of GitHub customers, helping them to :heart: their GitHub experience, while maximizing their value from GitHub. 
+  - **What does that mean?** I'm a technical leader for a portfolio of GitHub customers helping them to have a great GitHub experience, while maximizing their value from GitHub. 
 - **Passions:** cybersecurity and helping others
 - **Interests:** Secure DevOps, Security-as-Code
 - **Disclaimer:** content, thoughts, or views from my personal accounts are my own and do not reflect the views of my current, previous, or future employeers. 
 
 ### Links:
 - [LinkedIn](https://www.linkedin.com/in/benarculus/): to follow or connect with me. 
-- [Credly](https://www.credly.com/users/benarculus/badges): to view some of my credentials, or badges. 
+- [Credly](https://www.credly.com/users/benarculus/badges): to view some of my credentials. 
 <!-- 
 - [Medium](https://medium.com/@benarculus): to read some of my opinions.
 - [Twitter](https://twitter.com/benarculus): to stay up-to-date with content I release. 
@@ -17,5 +17,4 @@
 ### Photos:
 - [benarculus-formal]()
 - [benarculus-avatar]()
-- **Disclaimer:** My photo and avatar are copyrighted and require my authorization for any re-use.
 -->
