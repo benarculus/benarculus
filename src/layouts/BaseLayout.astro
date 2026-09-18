@@ -6,7 +6,7 @@ interface Props {
   title?: string;
   description?: string;
   pathname?: string;
-  image?: string;
+  socialImage?: string;
   type?: "website" | "article";
 }
 
@@ -14,12 +14,13 @@ const {
   title = SITE.title,
   description = SITE.description,
   pathname = Astro.url.pathname,
-  image = "/images/writing-practice.svg",
+  socialImage = "/images/writing-practice-social.png",
   type = "website",
 } = Astro.props;
 const canonical = absoluteUrl(pathname);
-const socialImage = absoluteUrl(image);
-const current = pathname.startsWith("/blog") ? "blog" : "home";
+const socialImageUrl = absoluteUrl(socialImage);
+const current =
+  pathname === "/" ? "home" : pathname.startsWith("/blog") ? "blog" : undefined;
 ---
 
 <!doctype html>
@@ -39,11 +40,11 @@ const current = pathname.startsWith("/blog") ? "blog" : "home";
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={socialImage} />
+    <meta property="og:image" content={socialImageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image" content={socialImageUrl} />
     <title>{title}</title>
     <slot name="head" />
   </head>
@@ -57,7 +58,7 @@ const current = pathname.startsWith("/blog") ? "blog" : "home";
           aria-current={current === "home" ? "page" : undefined}>Home</a
         >
         <a
-          href={withBase("/blog")}
+          href={withBase("/blog/")}
           aria-current={current === "blog" ? "page" : undefined}>Notes</a
         >
       </nav>

@@ -20,7 +20,7 @@ const featured = posts[0];
         of building startups—shared from experience, curiosity, and lessons
         still in progress.
       </p>
-      <a class="button" href={withBase("/blog")}>Read the notes</a>
+      <a class="button" href={withBase("/blog/")}>Read the notes</a>
     </div>
   </section>
   {
@@ -36,7 +36,7 @@ const featured = posts[0];
             and turning early ideas into useful work.
           </p>
         </div>
-        <PostCard post={featured} headingLevel="h3" />
+        <PostCard post={featured} headingLevel="h3" featured />
       </section>
     )
   }

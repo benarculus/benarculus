@@ -1,5 +1,7 @@
 import { z } from "astro/zod";
 
+export const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export const postSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
@@ -10,5 +12,8 @@ export const postSchema = z.object({
   heroAlt: z.string().min(1),
   tags: z.array(z.string()).default([]),
   draft: z.boolean().default(false),
-  slug: z.string().min(1).optional(),
+  slug: z
+    .string()
+    .regex(slugPattern, "Slug must be a URL-safe, lowercase single segment.")
+    .optional(),
 });

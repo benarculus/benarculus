@@ -40,6 +40,12 @@ describe("post publishing helpers", () => {
     expect(getPostSlug(post("derived.md"))).toBe("derived");
   });
 
+  it("rejects an unsafe filename-derived slug", () => {
+    expect(() => getPostSlug(post("nested/derived.md"))).toThrow(
+      "URL-safe single segment",
+    );
+  });
+
   it("filters drafts and orders posts newest first", () => {
     const result = getPublishedPosts([
       post("older.md"),
@@ -67,16 +73,16 @@ describe("post publishing helpers", () => {
 describe("URL helpers", () => {
   it("uses root-relative production URLs", () => {
     expect(getSiteBase("production")).toBe("/");
-    expect(withBase("/blog", "production")).toBe("/blog");
-    expect(absoluteUrl("/blog", "production")).toBe(
-      "https://www.benarculus.com/blog",
+    expect(withBase("/blog/", "production")).toBe("/blog/");
+    expect(absoluteUrl("/blog/", "production")).toBe(
+      "https://www.benarculus.com/blog/",
     );
   });
 
   it("uses the project base for preview URLs", () => {
-    expect(withBase("/blog", "preview")).toBe("/benarculus/blog");
-    expect(absoluteUrl("/blog", "preview")).toBe(
-      "https://benarculus.github.io/benarculus/blog",
+    expect(withBase("/blog/", "preview")).toBe("/benarculus/blog/");
+    expect(absoluteUrl("/blog/", "preview")).toBe(
+      "https://benarculus.github.io/benarculus/blog/",
     );
   });
 });
@@ -87,13 +93,13 @@ describe("article metadata", () => {
       slug: "clarity",
       updatedDate: new Date("2024-02-02T12:00:00Z"),
     });
-    expect(postPath(entry)).toBe("/blog/clarity");
+    expect(postPath(entry)).toBe("/blog/clarity/");
     expect(articleJsonLd(entry)).toMatchObject({
       "@type": "BlogPosting",
       headline: "A post",
       datePublished: "2024-01-01T12:00:00.000Z",
       dateModified: "2024-02-02T12:00:00.000Z",
-      mainEntityOfPage: "https://www.benarculus.com/blog/clarity",
+      mainEntityOfPage: "https://www.benarculus.com/blog/clarity/",
     });
   });
 });

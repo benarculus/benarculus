@@ -12,8 +12,8 @@
 * Status: Partial
 * Declared invocation scope: full plan
 * Completed scope markers: P01 through P04, including P01-T01 through P04-T03
-* All remaining active-plan markers: P05-T02 and P05-T03
-* Status basis: The site, content migration, tests, documentation, workflows, Pages configuration, repository safeguards, and owner-approved quality validation are complete. P05-T02 is resumed but blocked awaiting the owner's non-sensitive Squarespace/DNS inventory summary; deployment from merged `main` and DNS cutover remain dependent on it.
+* All remaining active-plan markers: P05-T03
+* Status basis: The site, content migration, tests, documentation, workflows, Pages configuration, repository safeguards, owner-side inventory, and owner-approved quality validation are complete. Deployment from merged `main` and the explicitly owner-approved DNS cutover remain.
 
 ## Execution Summary
 
@@ -154,9 +154,9 @@ The repository now contains a typed static Astro site, validated Markdown conten
 * Affected plan area or markers: P05-T03
 * What changed: Added a `Guidance:` block directing P05-T03 to consume the owner-completed [`docs/migration-inventory.md`](../../../docs/migration-inventory.md) gate through its non-sensitive summary only.
 * Why: P05-T03 depends on rollback and DNS evidence created during P05-T02, and the plan did not previously name the concrete checklist path.
-* Triggering evidence: Full-plan implementation resumed at P05-T02 while the owner works through the inventory.
+* Triggering evidence: Full-plan implementation resumed at P05-T02 before the owner completed the inventory.
 * User answer or decision: The owner previously selected the safe private inventory workflow.
-* Reconciliation performed: P05-T02 remains unchecked and P05-T03 remains dependency-blocked.
+* Reconciliation performed: P05-T02 later completed; P05-T03 remains dependency-blocked until the branch merges and the owner approves DNS cutover.
 * Planning and critique state: Ready; no new critique required.
 
 ## Validation Record
@@ -167,10 +167,10 @@ The repository now contains a typed static Astro site, validated Markdown conten
 | Repository setting read-back | P01-T01 | Passed | Actions default read-only; workflow PR approval disabled; secret scanning and push protection enabled |
 | Deterministic dependency install | P01-T02 | Passed | Exact direct versions, committed `package-lock.json`, `npm install` audit reported zero vulnerabilities |
 | Astro and formatting checks | P01-P04 | Passed | Zero errors, warnings, or hints; Prettier passed |
-| Unit tests and coverage | P01-T04 | Passed | 20 tests; 100% statements, lines, and functions; 85% branches |
+| Unit tests and coverage | P01-T04 | Passed | 27 tests; 100% statements, lines, and functions; 86.36% branches |
 | Production generated output | P03-T02 | Passed | Routes, canonical/social metadata, JSON-LD, RSS, sitemap, and robots assertions passed |
 | Preview generated output | P03-T02, P04-T02 | Passed | `/benarculus` assets, links, metadata, feed, sitemap, and robots assertions passed |
-| Browser regression suite | P01-T04, P02-T03, P05-T01 | Passed | 18 tests in Chromium, Firefox, and WebKit |
+| Browser regression suite | P01-T04, P02-T03, P05-T01 | Passed | 24 tests in Chromium, Firefox, and WebKit |
 | Lighthouse mobile medians | P05-T01 | Passed | Home, blog, article: 100 performance, 100 accessibility, 96 best practices, 100 SEO |
 | Live repository controls | P04-T02, P04-T03 | Passed | Pages via Actions, private reporting, secret protections, and active required-check ruleset verified |
 
@@ -178,12 +178,11 @@ The repository now contains a typed static Astro site, validated Markdown conten
 
 * Plan markers and task-local context: P01 through P04 are checked and supported by implementation evidence.
 * Completed-work evidence and handoff prose: Current for source, migration, automation, documentation, and repository settings.
-* Validation, blockers, remaining work, and follow-up items: Automated validation is current; P05 remains owner-gated.
-* Review readiness: Not ready for full-plan Review because P05-T02 owner inventory and P05-T03 deployment/cutover remain.
+* Validation, blockers, remaining work, and follow-up items: Automated validation is current; P05-T03 remains owner-gated.
+* Review readiness: Not ready for full-plan Review because P05-T03 deployment/cutover remains.
 
 ## Blockers
 
-* P05-T02: Squarespace private/draft/unindexed content, analytics, DNS, and rollback inventory requires the owner's non-sensitive completion summary.
 * P05-T03: The Pages workflow cannot deploy until these changes reach protected `main`; DNS and custom-domain activation remain explicitly owner-gated.
 
 ### Owner-side inventory handoff
@@ -209,6 +208,11 @@ The repository now contains a typed static Astro site, validated Markdown conten
 * Third owner revision: replaced the pen's tan block-shaped rear end, which read as a pencil eraser, with a domed pen-cap shape rendered in the same evergreen body gradient with a thin gold ring, matching the rest of the pen instead of contrasting with it.
 * Replacement validation: Astro and formatting checks passed; 20 unit tests retained 100% statement, line, and function coverage with 85% branch coverage; production and preview generated-output assertions passed; 18 Playwright cases passed across Chromium, Firefox, and WebKit. After each of the pen-writing, nib/position, and cap revisions, Lighthouse medians remained 100 performance, 100 accessibility, 96 best practices, and 100 SEO on home, blog, and article routes.
 * Owner acceptance: The owner approved the final revised illustration on 2026-09-18. P05-T02 is complete: the private inventory, public-item disposition, image-rights resolution, replacement asset, and rollback record are all complete.
+
+### Pull request review corrections
+
+* Applied the 2026-09-18 pull request review findings: Pages CI now installs Playwright before validation and rejects files within hidden directories; canonical URLs, internal links, RSS, sitemap, generated-output assertions, browser tests, and Lighthouse targets consistently use Pages directory URLs; social metadata uses a local 1200-by-630 PNG derivative of the approved SVG; and slug, XML-escaping, no-client-script, responsive reflow, workflow-discovery, navigation-state, category-label, article-copy, and tracking-state safeguards are covered.
+* Validation: `npm run check`, `npm run test:unit` (27 passing tests; 100% statements, lines, and functions; 86.36% branches), production and preview builds with generated-output assertions, `npm run test:browser` (24 passing cases across Chromium, Firefox, and WebKit), `npm run test:lighthouse` (100/100/96/100 median scores on each representative route), and `git diff --check` passed.
 
 ## Remaining Work
 

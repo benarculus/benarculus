@@ -24,7 +24,7 @@ describe("discovery helpers", () => {
       title: "Clear thinking",
       description: "A short description",
       pubDate: new Date("2024-02-12T16:50:00Z"),
-      link: "https://www.benarculus.com/blog/clear-thinking",
+      link: "https://www.benarculus.com/blog/clear-thinking/",
       author: "Ben Arculus",
     });
   });
@@ -32,14 +32,20 @@ describe("discovery helpers", () => {
   it("selects public sitemap routes", () => {
     expect(sitemapPaths([post])).toEqual([
       "/",
-      "/blog",
-      "/blog/clear-thinking",
+      "/blog/",
+      "/blog/clear-thinking/",
     ]);
   });
 
   it("renders absolute production sitemap entries", () => {
     expect(sitemapXml(["/", "/blog"])).toContain(
       "<loc>https://www.benarculus.com/blog</loc>",
+    );
+  });
+
+  it("escapes XML-sensitive characters in sitemap locations", () => {
+    expect(sitemapXml(["/blog?topic=writing&format=rss"])).toContain(
+      "<loc>https://www.benarculus.com/blog?topic=writing&amp;format=rss</loc>",
     );
   });
 });

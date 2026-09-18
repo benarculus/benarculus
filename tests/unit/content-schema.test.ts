@@ -48,4 +48,14 @@ describe("post schema", () => {
       }).success,
     ).toBe(false);
   });
+
+  it.each([
+    "nested/slug",
+    "query?slug",
+    "fragment#slug",
+    "space slug",
+    "../slug",
+  ])("rejects a non-segment slug of %s", (slug) => {
+    expect(postSchema.safeParse({ ...validPost, slug }).success).toBe(false);
+  });
 });

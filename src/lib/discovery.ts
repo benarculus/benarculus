@@ -1,6 +1,18 @@
 import type { PostEntry } from "./site";
 import { absoluteUrl, postPath } from "./site";
 
+const xmlEntities: Record<string, string> = {
+  "<": "&lt;",
+  ">": "&gt;",
+  "&": "&amp;",
+  "'": "&apos;",
+  '"': "&quot;",
+};
+
+function escapeXml(value: string): string {
+  return value.replace(/[<>&'"]/g, (character) => xmlEntities[character]);
+}
+
 export function rssItem(post: PostEntry) {
   return {
     title: post.data.title,
@@ -12,12 +24,12 @@ export function rssItem(post: PostEntry) {
 }
 
 export function sitemapPaths(posts: PostEntry[]): string[] {
-  return ["/", "/blog", ...posts.map(postPath)];
+  return ["/", "/blog/", ...posts.map(postPath)];
 }
 
 export function sitemapXml(paths: string[]): string {
   const entries = paths
-    .map((path) => `  <url><loc>${absoluteUrl(path)}</loc></url>`)
+    .map((path) => `  <url><loc>${escapeXml(absoluteUrl(path))}</loc></url>`)
     .join("\n");
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',

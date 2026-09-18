@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { slugPattern } from "./content-schema";
 
 export const SITE = {
   name: "Ben Arculus",
@@ -14,7 +15,11 @@ export const SITE = {
 export type PostEntry = CollectionEntry<"posts">;
 
 export function getPostSlug(post: PostEntry): string {
-  return post.data.slug ?? post.id.replace(/\.md$/, "");
+  const slug = post.data.slug ?? post.id.replace(/\.md$/, "");
+  if (!slugPattern.test(slug)) {
+    throw new Error(`Post slug must be a URL-safe single segment: ${slug}`);
+  }
+  return slug;
 }
 
 export function getPublishedPosts(posts: PostEntry[]): PostEntry[] {
@@ -59,7 +64,7 @@ export function absoluteUrl(
 }
 
 export function postPath(post: PostEntry): string {
-  return `/blog/${getPostSlug(post)}`;
+  return `/blog/${getPostSlug(post)}/`;
 }
 
 export function articleJsonLd(post: PostEntry) {

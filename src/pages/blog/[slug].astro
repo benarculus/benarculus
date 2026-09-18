@@ -30,7 +30,7 @@ const jsonLd = articleJsonLd(post);
   title={`${post.data.title} — Ben Arculus`}
   description={post.data.description}
   pathname={postPath(post)}
-  image={post.data.heroImage}
+  socialImage="/images/writing-practice-social.png"
   type="article"
 >
   <script
@@ -40,7 +40,7 @@ const jsonLd = articleJsonLd(post);
   />
   <article>
     <header class="article-header">
-      <p class="eyebrow">Leadership practice</p>
+      <p class="eyebrow">{post.data.tags[0] ?? "Personal note"}</p>
       <h1>{post.data.title}</h1>
       <p class="lede">{post.data.description}</p>
       <p class="meta">

@@ -5,8 +5,8 @@ import { chromium } from "@playwright/test";
 const outputDirectory = "lighthouse-results";
 const routes = [
   ["/", "home"],
-  ["/blog", "blog"],
-  ["/blog/generate-clarity-by-establishing-a-writing-practice", "article"],
+  ["/blog/", "blog"],
+  ["/blog/generate-clarity-by-establishing-a-writing-practice/", "article"],
 ];
 const categories = {
   performance: 0.9,

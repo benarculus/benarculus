@@ -19,7 +19,7 @@ const origin =
     ? "https://benarculus.github.io"
     : "https://www.benarculus.com";
 const base = mode === "preview" ? "/benarculus" : "";
-const articleUrl = `${origin}${base}/blog/${articleSlug}`;
+const articleUrl = `${origin}${base}/blog/${articleSlug}/`;
 
 assert.match(article, new RegExp(`<link rel="canonical" href="${articleUrl}"`));
 assert.match(
@@ -32,17 +32,21 @@ assert.match(
 );
 assert.match(article, /"@type":"BlogPosting"/);
 assert.match(article, new RegExp(`"mainEntityOfPage":"${articleUrl}"`));
-assert.match(index, new RegExp(`href="${base}/blog"`));
+assert.match(index, new RegExp(`href="${base}/blog/"`));
 assert.match(index, new RegExp(`src="${base}/images/writing-practice.svg"`));
 assert.match(
   rss,
-  new RegExp(`<link>${origin}${base}/blog/${articleSlug}</link>`),
+  new RegExp(`<link>${origin}${base}/blog/${articleSlug}/</link>`),
 );
 assert.match(
   sitemap,
-  new RegExp(`<loc>${origin}${base}/blog/${articleSlug}</loc>`),
+  new RegExp(`<loc>${origin}${base}/blog/${articleSlug}/</loc>`),
 );
 assert.match(robots, new RegExp(`Sitemap: ${origin}${base}/sitemap.xml`));
-assert.doesNotMatch(article, /<script[^>]+src=/);
+const markupWithoutJsonLd = article.replace(
+  /<script type="application\/ld\+json">[\s\S]*?<\/script>/g,
+  "",
+);
+assert.doesNotMatch(markupWithoutJsonLd, /<script\b/);
 
 console.log(`Generated ${mode} output passed route and metadata assertions.`);

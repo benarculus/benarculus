@@ -28,12 +28,13 @@ jobs:
       # actions/configure-pages v5.0.0
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
       - run: npm ci
+      - run: npx playwright install --with-deps
       - run: npm run validate
       - run: npm run build:preview
       - run: npm run test:generated:preview
       - name: Reject hidden files in the artifact
         run: |
-          if find dist -type f -name '.*' -print -quit | grep -q .; then
+          if find dist -type f \( -name '.*' -o -path '*/.*/*' \) -print -quit | grep -q .; then
             echo "Hidden files must not be published."
             exit 1
           fi

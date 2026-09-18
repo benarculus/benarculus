@@ -21,7 +21,7 @@ export default defineConfig({
   output: "static",
   site: preview ? "https://benarculus.github.io" : "https://www.benarculus.com",
   base: preview ? "/benarculus" : "/",
-  trailingSlash: "never",
+  trailingSlash: "always",
   markdown: {
     processor: unified({
       remarkPlugins: [rejectRawHtml],

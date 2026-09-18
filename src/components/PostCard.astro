@@ -5,9 +5,10 @@ import { postPath, withBase } from "../lib/site";
 interface Props {
   post: PostEntry;
   headingLevel?: "h2" | "h3";
+  featured?: boolean;
 }
 
-const { post, headingLevel = "h2" } = Astro.props;
+const { post, headingLevel = "h2", featured = false } = Astro.props;
 const Heading = headingLevel;
 ---
 
@@ -19,7 +20,7 @@ const Heading = headingLevel;
     height="1126"
   />
   <div class="post-card-copy">
-    <p class="eyebrow">Featured essay</p>
+    <p class="eyebrow">{featured ? "Featured essay" : "Essay"}</p>
     <Heading>
       <a href={withBase(postPath(post))}>{post.data.title}</a>
     </Heading>

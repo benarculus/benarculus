@@ -1,10 +1,9 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-const workflows = [
-  ".github/workflows/ci.yml",
-  ".github/workflows/pages.yml",
-].map((path) => readFileSync(path, "utf8"));
+const workflows = readdirSync(".github/workflows")
+  .filter((file) => /\.ya?ml$/.test(file))
+  .map((file) => readFileSync(`.github/workflows/${file}`, "utf8"));
 
 describe("workflow trust policy", () => {
   it("pins every Action to a full commit SHA", () => {
