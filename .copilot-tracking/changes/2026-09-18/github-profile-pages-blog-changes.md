@@ -107,6 +107,16 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 * Completion evidence: `dig +short benarculus.com A` returned Squarespace IPs `198.49.23.144`, `198.49.23.145`, `198.185.159.144`, and `198.185.159.145`; `benarculus.com` had no `AAAA` or `CNAME`; `www.benarculus.com` resolved through `ext-cust.squarespace.com` and Squarespace IPs.
 * Validation: P03-T03 is not complete until the user changes DNS or explicitly decides to defer/alter that step.
 
+### Resumed production verification blocked by unchanged DNS
+
+* Related phase or task: P03-T03
+* Files:
+  * `benarculus.com`
+  * `github.com/benarculus/benarculus.com`
+* What changed and why: Resumed implementation after the DNS handoff prompt and rechecked public DNS, destination Pages settings, and production URLs before continuing. No repository or DNS-provider changes were made during this resumed check.
+* Completion evidence: At `2026-09-19T08:23:46-04:00`, `dig +short benarculus.com A` still returned Squarespace IPs `198.49.23.144`, `198.49.23.145`, `198.185.159.144`, and `198.185.159.145`; `benarculus.com` still had no `AAAA` or `CNAME`. `curl -I https://benarculus.com/`, `/blog/`, and `/rss.xml` returned `server: Squarespace`. Destination Pages still reported `cname: "benarculus.com"` and `https_enforced: false`.
+* Validation: Blocked; P03-T03 remains incomplete until apex DNS resolves to GitHub Pages records.
+
 ## Implementation-Time Plan Updates
 
 * P03-T02 evidence confirmed the source repository could release the `benarculus.com` Pages claim without disabling source Pages entirely. Source Pages remains enabled for the project preview URL until P04 cleanup, but no longer claims the apex domain.
@@ -124,7 +134,7 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 | Destination workflow adaptation | P02-T03 | Passed | Destination Actions `Deploy GitHub Pages` runs `35416373754`, `35416675293`, and production run `35417045187` passed after workflow scoping fix. |
 | Preview live verification | P03-T01 | Passed | Preview URL, blog index, article permalink, RSS, sitemap, robots, and image asset returned `HTTP/2 200`; RSS and robots referenced `/benarculus.com` paths. |
 | Pages custom-domain handoff | P03-T02 | Passed | Source Pages `cname` changed from `benarculus.com` to `null`; destination Pages `cname` changed from `null` to `benarculus.com`; production-mode deployment succeeded. |
-| DNS update | P03-T03 | Blocked | Current apex DNS still points to Squarespace IPs; user-owned DNS change is required before production live verification. |
+| DNS update | P03-T03 | Blocked | Current apex DNS still points to Squarespace IPs and production URL responses are served by Squarespace; user-owned DNS change is required before production live verification. |
 
 ## Pre-Review Reconciliation
 
