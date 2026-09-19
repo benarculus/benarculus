@@ -401,7 +401,7 @@ Dependencies:
 * P03-T01.
 
 <!-- rpi:task id=P03-T03 -->
-#### [ ] P03-T03: Provide DNS instructions and pause for user-owned DNS update
+#### [x] P03-T03: Provide DNS instructions and pause for user-owned DNS update
 
 Goals:
 * Give the user exact DNS-provider changes and rollback information, then wait for user completion before production verification.

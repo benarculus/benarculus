@@ -117,6 +117,30 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 * Completion evidence: At `2026-09-19T08:23:46-04:00`, `dig +short benarculus.com A` still returned Squarespace IPs `198.49.23.144`, `198.49.23.145`, `198.185.159.144`, and `198.185.159.145`; `benarculus.com` still had no `AAAA` or `CNAME`. `curl -I https://benarculus.com/`, `/blog/`, and `/rss.xml` returned `server: Squarespace`. Destination Pages still reported `cname: "benarculus.com"` and `https_enforced: false`.
 * Validation: Blocked; P03-T03 remains incomplete until apex DNS resolves to GitHub Pages records.
 
+### User-owned DNS update completed
+
+* Related phase or task: P03-T03
+* Files:
+  * `benarculus.com`
+  * `github.com/benarculus/benarculus.com`
+* What changed and why: Rechecked the user-owned DNS update before production verification. The apex now points to GitHub Pages, while no `www` redirect or DNS change was added.
+* Completion evidence: At `2026-09-19T12:20:23-04:00`, `dig +short benarculus.com A` returned `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`; authoritative nameservers are the Google Domains nameservers. The destination Pages settings still report `cname: "benarculus.com"`.
+* Validation: Passed for the user-owned DNS requirement. HTTPS certificate issuance remains a P03-T04 prerequisite; secure requests currently report a hostname mismatch.
+
+### Production artifact reachable while HTTPS certificate is pending
+
+* Related phase or task: P03-T04
+* Files:
+  * `https://benarculus.com/`
+  * `https://benarculus.com/blog/`
+  * `https://benarculus.com/blog/generate-clarity-by-establishing-a-writing-practice/`
+  * `https://benarculus.com/rss.xml`
+  * `https://benarculus.com/sitemap.xml`
+  * `https://benarculus.com/robots.txt`
+* What changed and why: Rechecked the production deployment after DNS propagation. GitHub Pages is serving the production artifact at the apex, but certificate issuance has not completed, so verification remains incomplete until normal certificate-validated HTTPS is available.
+* Completion evidence: Requests made with certificate verification disabled returned `HTTP/2 200` from `server: GitHub.com` for the home page, blog index, RSS, sitemap, robots, and key image; the article route is served by the same Pages artifact. The home page contains canonical `https://benarculus.com/` metadata. GitHub Pages health reports `is_pointed_to_github_pages_ip: true`, `is_served_by_pages: true`, `is_valid: true`, `is_https_eligible: true`, `responds_to_https: false`, and `https_error: "peer_failed_verification"`.
+* Validation: Partial; production content is reachable, but P03-T04 cannot complete until the apex certificate is issued and HTTPS enforcement can be enabled.
+
 ## Implementation-Time Plan Updates
 
 * P03-T02 evidence confirmed the source repository could release the `benarculus.com` Pages claim without disabling source Pages entirely. Source Pages remains enabled for the project preview URL until P04 cleanup, but no longer claims the apex domain.
@@ -134,22 +158,23 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 | Destination workflow adaptation | P02-T03 | Passed | Destination Actions `Deploy GitHub Pages` runs `35416373754`, `35416675293`, and production run `35417045187` passed after workflow scoping fix. |
 | Preview live verification | P03-T01 | Passed | Preview URL, blog index, article permalink, RSS, sitemap, robots, and image asset returned `HTTP/2 200`; RSS and robots referenced `/benarculus.com` paths. |
 | Pages custom-domain handoff | P03-T02 | Passed | Source Pages `cname` changed from `benarculus.com` to `null`; destination Pages `cname` changed from `null` to `benarculus.com`; production-mode deployment succeeded. |
-| DNS update | P03-T03 | Blocked | Current apex DNS still points to Squarespace IPs and production URL responses are served by Squarespace; user-owned DNS change is required before production live verification. |
+| DNS update | P03-T03 | Passed | Apex DNS now resolves to all four GitHub Pages A records; production HTTPS certificate issuance remains pending for P03-T04. |
+| Production artifact reachability | P03-T04 | Partial | GitHub Pages serves the production artifact and generated routes return `HTTP/2 200` with certificate verification disabled; normal TLS verification fails because the certificate is not yet valid for `benarculus.com`. |
 
 ## Pre-Review Reconciliation
 
-* Plan markers and task-local context: current through P02 and P03-T02
+* Plan markers and task-local context: current through P02 and P03-T03
 * Completed-work evidence and handoff prose: current through destination migration, preview verification, and Pages claim handoff
-* Validation, blockers, remaining work, and follow-up items: current for the DNS handoff pause
-* Review readiness: not ready; P03-T03, P03-T04, and P04 remain incomplete
+* Validation, blockers, remaining work, and follow-up items: current through DNS propagation and certificate issuance wait
+* Review readiness: not ready; P03-T04 and P04 remain incomplete
 
 ## Blockers
 
-* P03-T03 is waiting on the user-owned DNS-provider update for `benarculus.com`. The agent has not changed DNS-provider records.
+* P03-T04 is waiting for GitHub Pages certificate issuance/HTTPS enforcement after the user-owned DNS update. The agent did not change DNS-provider records.
 
 ## Remaining Work
 
-* P03-T03, P03-T04, P04, P04-T01, and P04-T02 remain active.
+* P03-T04, P04, P04-T01, and P04-T02 remain active.
 
 ## Follow-Up Items
 
@@ -158,11 +183,11 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 
 ## Return-to-Caller State
 
-* Implementation execution status: Partial; paused at DNS handoff
-* Declared scope and markers: full plan; P01, P01-T01, P01-T02, P02, P02-T01, P02-T02, P02-T03, P03-T01, and P03-T02 complete; P03-T03 and later markers remain
-* Validation coverage: destination repository availability, migration boundary, destination quality checks, preview and production-mode Pages deployments, hosted preview routes, RSS/sitemap/robots/assets, and Pages custom-domain handoff checked
-* Blockers: user-owned DNS-provider update for `benarculus.com`
-* Current plan updates: P03-T02 records that the source Pages site remains enabled but no longer claims the apex; P03-T03 records current Squarespace DNS state
+* Implementation execution status: Partial; DNS updated, awaiting GitHub Pages certificate issuance
+* Declared scope and markers: full plan; P01, P01-T01, P01-T02, P02, P02-T01, P02-T02, P02-T03, P03-T01, P03-T02, and P03-T03 complete; P03-T04 and later markers remain
+* Validation coverage: destination repository availability, migration boundary, destination quality checks, preview and production-mode Pages deployments, hosted preview routes, RSS/sitemap/robots/assets, Pages custom-domain handoff, and apex DNS A-record propagation checked
+* Blockers: GitHub Pages HTTPS certificate issuance is not complete; secure requests currently report a hostname mismatch
+* Current plan updates: P03-T02 records the Pages claim handoff; P03-T03 now records that apex DNS resolves to all four GitHub Pages A records and the user-owned DNS action is complete
 * Planning and critique state: current and ready for implementation
 * Follow-up items: `www.benarculus.com` redirect decision remains follow-up-only
 * Review readiness or no-handoff reason: not ready; production activation and profile repository cleanup remain incomplete
