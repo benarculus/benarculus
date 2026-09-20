@@ -1,18 +1,5 @@
-# Hi, I'm Ben.
+# Hello
 
-I write personal notes about technical leadership, cybersecurity, AI, and the work of building
-startups.
+You can find repositories which I have found interesting through my [stars tab](https://github.com/benarculus?tab=stars) or below which I have pinned. You can also find repositories which I have [published here](https://github.com/benarculus?tab=repositories). Hopefully you can come across something helpful to you.
 
-My interests sit where technology and people meet: leading teams, making complex systems safer,
-communicating ideas clearly, and learning through the process of building.
-
-- [Visit benarculus.com](https://benarculus.com/)
-- [Read my notes](https://benarculus.com/blog/)
-- [Website source: benarculus/benarculus.com](https://github.com/benarculus/benarculus.com)
-
-## About this repository
-
-This repository provides my GitHub profile README. The website and blog source, content, and
-deployment now live in [benarculus/benarculus.com](https://github.com/benarculus/benarculus.com).
-
-Available under the [MIT License](LICENSE).
+You may also visit my blog at [benarculus.com](https://benarculus.com/), where I try to keep up with notes on cybersecurity, entrepreneurship, leadership, and others professional topics.
