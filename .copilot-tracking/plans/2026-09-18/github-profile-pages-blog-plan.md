@@ -304,7 +304,7 @@ Dependencies:
 * P02-T02.
 
 <!-- rpi:phase id=P03 -->
-### [ ] P03: Verify preview and activate apex production domain
+### [x] P03: Verify preview and activate apex production domain
 
 Goals:
 * Prove the destination repository can build and serve the site at its preview URL, then activate apex `benarculus.com` through an explicit GitHub Pages claim, user-owned DNS update, production-mode deployment, HTTPS enforcement, and live verification.
@@ -427,7 +427,7 @@ Dependencies:
 * P03-T02.
 
 <!-- rpi:task id=P03-T04 -->
-#### [ ] P03-T04: Verify production activation, HTTPS, and preserved routes
+#### [x] P03-T04: Verify production activation, HTTPS, and preserved routes
 
 Goals:
 * Confirm that apex `https://benarculus.com/` serves the production-mode Astro site from the destination repository and preserves the user-visible blog surface.
@@ -457,7 +457,7 @@ Dependencies:
 * P03-T03.
 
 <!-- rpi:phase id=P04 -->
-### [ ] P04: Simplify the profile repository and finalize the split
+### [x] P04: Simplify the profile repository and finalize the split
 
 Goals:
 * Remove website-source and Pages-serving responsibility from `benarculus/benarculus`, leave a clean profile README, and document the new source-of-truth relationship.
@@ -502,7 +502,7 @@ flowchart LR
 Highlighted work: profile README cleanup, source links, removal of website source, and disabling/removing stale Pages publication from the profile repository.
 
 <!-- rpi:task id=P04-T01 -->
-#### [ ] P04-T01: Replace profile repository content with profile-only scope
+#### [x] P04-T01: Replace profile repository content with profile-only scope
 
 Goals:
 * Make `benarculus/benarculus` clearly profile-only after the website source and production activation are safely established elsewhere.
@@ -532,7 +532,7 @@ Dependencies:
 * P03-T04.
 
 <!-- rpi:task id=P04-T02 -->
-#### [ ] P04-T02: Finalize cross-repository documentation and validation evidence
+#### [x] P04-T02: Finalize cross-repository documentation and validation evidence
 
 Goals:
 * Leave both repositories understandable and auditable after the split.

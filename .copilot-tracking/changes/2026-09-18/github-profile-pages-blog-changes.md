@@ -9,15 +9,15 @@
 
 ## Execution Status
 
-* Status: Partial
+* Status: Complete
 * Declared invocation scope: full plan
-* Completed scope markers: P01, P01-T01, P01-T02, P02, P02-T01, P02-T02, P02-T03, P03-T01, P03-T02
-* All remaining active-plan markers: P03, P03-T03, P03-T04, P04, P04-T01, P04-T02
-* Status basis: Destination repository migration, preview verification, custom-domain claim handoff, and production-mode destination deployment are complete. Work is paused at the user-owned DNS update required by P03-T03.
+* Completed scope markers: P01, P01-T01, P01-T02, P02, P02-T01, P02-T02, P02-T03, P03, P03-T01, P03-T02, P03-T03, P03-T04, P04, P04-T01, P04-T02
+* All remaining active-plan markers: none
+* Status basis: Every plan phase and task has recorded completion evidence: destination repository migration, preview and production verification, apex DNS/HTTPS activation, profile-repository reduction to profile-only scope, and cross-repository documentation finalization.
 
 ## Execution Summary
 
-Implementation started for the full plan. P01 and P02 are complete: `benarculus/benarculus.com` exists as the public destination repository, the Astro site source and repository support files were migrated there, destination preview and production URL semantics were adapted, and destination workflows passed after implementation-time fixes. P03-T01 and P03-T02 are complete: the GitHub Pages preview served correctly at `https://benarculus.github.io/benarculus.com/`, the source repository released `benarculus.com`, the destination repository claimed `benarculus.com`, and a production-mode Pages deployment succeeded. Implementation is paused at P03-T03 for the user-owned DNS-provider change.
+Implementation completed the full plan. `benarculus/benarculus.com` is the public destination repository containing the migrated Astro site, adapted preview/production URL configuration, and adapted Pages/CI workflows. Preview and production Pages deployments both succeeded, the apex Pages custom-domain claim was handed off from the profile repository, the user updated apex DNS to GitHub Pages, and GitHub Pages issued the HTTPS certificate and enabled HTTPS enforcement. Live verification confirmed `https://benarculus.com/`, `/blog/`, the existing post permalink, RSS, sitemap, robots, canonical metadata, and the HTTP-to-HTTPS redirect all resolve correctly from the production domain with no preview-base or `benarculus.github.io` leakage. The profile repository `benarculus/benarculus` was reduced to profile-only scope: website source, tests, docs, and Pages/CI workflows were removed, GitHub Pages was disabled for the profile repository, and the root `README.md` was rewritten to link to the live site, blog, and destination source repository. Destination documentation was finalized to describe production activation as complete, merged through pull request `benarculus/benarculus.com#5` after a newly discovered branch-protection ruleset required PR-based changes to that repository's `main` branch.
 
 ## Completed Work
 
@@ -141,10 +141,55 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 * Completion evidence: Requests made with certificate verification disabled returned `HTTP/2 200` from `server: GitHub.com` for the home page, blog index, RSS, sitemap, robots, and key image; the article route is served by the same Pages artifact. The home page contains canonical `https://benarculus.com/` metadata. GitHub Pages health reports `is_pointed_to_github_pages_ip: true`, `is_served_by_pages: true`, `is_valid: true`, `is_https_eligible: true`, `responds_to_https: false`, and `https_error: "peer_failed_verification"`.
 * Validation: Partial; production content is reachable, but P03-T04 cannot complete until the apex certificate is issued and HTTPS enforcement can be enabled.
 
+### Production activation, HTTPS, and route verification completed
+
+* Related phase or task: P03-T04
+* Files:
+  * `https://benarculus.com/`
+  * `https://benarculus.com/blog/`
+  * `https://benarculus.com/blog/generate-clarity-by-establishing-a-writing-practice/`
+  * `https://benarculus.com/rss.xml`
+  * `https://benarculus.com/sitemap.xml`
+  * `https://benarculus.com/robots.txt`
+* What changed and why: Rechecked GitHub Pages certificate and HTTPS-enforcement state after DNS propagation and confirmed full production activation.
+* Completion evidence: `gh api repos/benarculus/benarculus.com/pages` reports `https_enforced: true` and `html_url: "https://benarculus.com/"`. `curl -I https://benarculus.com/` succeeds with normal certificate verification and returns `HTTP/2 200` from `server: GitHub.com`. `/blog/`, the article permalink, `/rss.xml`, `/sitemap.xml`, and `/robots.txt` all return `HTTP/2 200`. The home page and article both carry `https://benarculus.com/...` canonical and `og:url` metadata; the RSS channel and item links, sitemap `<loc>` entries, and `robots.txt` `Sitemap:` line all use `https://benarculus.com`. `curl -I http://benarculus.com/` returns `301` to `https://benarculus.com/`. No response referenced `/benarculus.com/` preview-base paths or `benarculus.github.io`.
+* Validation: Passed; all P03-T04 requirements confirmed live.
+
+### Profile repository reduced to profile-only scope
+
+* Related phase or task: P04-T01
+* Files:
+  * [README.md](../../../README.md)
+  * `.github/workflows/pages.yml` (removed)
+  * `.github/workflows/ci.yml` (removed)
+  * `.github/dependabot.yml` (removed)
+  * `.github/CODEOWNERS` (removed)
+  * `astro.config.mjs`, `package.json`, `package-lock.json`, `playwright.config.ts`, `tsconfig.json`, `vitest.config.ts`, `.prettierrc.json`, `.prettierignore` (removed)
+  * `CONTENT_LICENSE.md`, `CONTRIBUTING.md`, `SECURITY.md` (removed)
+  * `docs/` (removed)
+  * `public/` (removed)
+  * `scripts/` (removed)
+  * `src/` (removed)
+  * `tests/` (removed)
+* What changed and why: Removed all website-source, test, documentation, and CI/Pages workflow files now that the destination repository is production-verified. Rewrote the profile `README.md` to be concise and profile-focused, linking to `https://benarculus.com/`, `https://benarculus.com/blog/`, and the `benarculus/benarculus.com` source repository. Disabled GitHub Pages for `benarculus/benarculus` so it no longer publishes stale site artifacts.
+* Completion evidence: `git status --short` in the profile repository shows the listed files staged as deleted and `README.md` staged as modified. `gh api -X DELETE repos/benarculus/benarculus/pages` succeeded, and a subsequent `gh api repos/benarculus/benarculus/pages` returned `404 Not Found`, confirming Pages is disabled. `LICENSE` was kept because it is a generic, non-site-specific MIT license appropriate for the profile repository.
+* Validation: Passed; profile repository content and Pages settings verified.
+
+### Cross-repository documentation and evidence finalized
+
+* Related phase or task: P04-T02
+* Files:
+  * `github.com/benarculus/benarculus.com` (`README.md`, `docs/authoring.md`)
+  * [.copilot-tracking/changes/2026-09-18/github-profile-pages-blog-changes.md](../../changes/2026-09-18/github-profile-pages-blog-changes.md) (this artifact)
+* What changed and why: Updated the destination repository's `README.md` and `docs/authoring.md` to describe production activation as complete rather than pending, since the publishing-model and hosting/recovery sections previously described DNS cutover and custom-domain activation as future steps. Confirmed the profile repository `README.md` (P04-T01) already documents that website source lives in `benarculus/benarculus.com`. Confirmed this changes record remains the single authoritative implementation evidence artifact; no competing tracking file was created in the destination repository.
+* Completion evidence: Destination pull request [benarculus/benarculus.com#5](https://github.com/benarculus/benarculus.com/pull/5) (`Document completed production activation`) passed all three required status checks (`Unit tests and coverage`, `Browser regression tests`, `Production and preview builds`) and was squash-merged at `2026-09-20T02:18:46Z`. This changes record references all destination commits (`a3bdf4d`, `7638580`, `45e3e2b`, PR `#5`), Pages settings evidence, DNS instructions and user confirmation, live production URLs, and the residual `www.benarculus.com` follow-up risk.
+* Validation: Passed; destination documentation, profile documentation, and evidence-record authority confirmed current.
+
 ## Implementation-Time Plan Updates
 
 * P03-T02 evidence confirmed the source repository could release the `benarculus.com` Pages claim without disabling source Pages entirely. Source Pages remains enabled for the project preview URL until P04 cleanup, but no longer claims the apex domain.
 * P03-T03 current-state evidence shows apex DNS still points to Squarespace; this is expected because the plan assigns DNS-provider changes to the user.
+* During P04-T02, the destination repository `benarculus/benarculus.com` was found to have a new branch-protection ruleset (`Protect main`, active since `2026-09-19T08:28:50-04:00`) requiring a pull request for every change to `main`, so direct commit-and-push to `main` (used for earlier P02/P03 work) is no longer possible there. This is an immediately relevant current-state update, not a scope or requirement change: subsequent destination-repository changes in this and future RPI runs must go through a pull request. Applied by opening and merging `benarculus/benarculus.com#5` (`docs/production-activation-notes` branch) after its required status checks passed.
 
 ## Validation Record
 
@@ -159,22 +204,24 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 | Preview live verification | P03-T01 | Passed | Preview URL, blog index, article permalink, RSS, sitemap, robots, and image asset returned `HTTP/2 200`; RSS and robots referenced `/benarculus.com` paths. |
 | Pages custom-domain handoff | P03-T02 | Passed | Source Pages `cname` changed from `benarculus.com` to `null`; destination Pages `cname` changed from `null` to `benarculus.com`; production-mode deployment succeeded. |
 | DNS update | P03-T03 | Passed | Apex DNS now resolves to all four GitHub Pages A records; production HTTPS certificate issuance remains pending for P03-T04. |
-| Production artifact reachability | P03-T04 | Partial | GitHub Pages serves the production artifact and generated routes return `HTTP/2 200` with certificate verification disabled; normal TLS verification fails because the certificate is not yet valid for `benarculus.com`. |
+| Production activation and route verification | P03-T04 | Passed | HTTPS enforced, certificate valid, all production routes/metadata/RSS/sitemap/robots verified, HTTP redirects to HTTPS, no preview-base or `benarculus.github.io` leakage. |
+| Profile repository profile-only scope | P04-T01 | Passed | Website-source and workflow files removed and staged for deletion; `README.md` rewritten and staged; GitHub Pages disabled (`404` on `repos/benarculus/benarculus/pages`). |
+| Cross-repository documentation finalization | P04-T02 | Passed | Destination PR `benarculus/benarculus.com#5` passed all required status checks and was merged; destination and profile READMEs are current; this changes record remains the sole authoritative evidence artifact. |
 
 ## Pre-Review Reconciliation
 
-* Plan markers and task-local context: current through P02 and P03-T03
-* Completed-work evidence and handoff prose: current through destination migration, preview verification, and Pages claim handoff
-* Validation, blockers, remaining work, and follow-up items: current through DNS propagation and certificate issuance wait
-* Review readiness: not ready; P03-T04 and P04 remain incomplete
+* Plan markers and task-local context: current through the full plan (P01–P04, all tasks)
+* Completed-work evidence and handoff prose: current through production activation, profile repository cleanup, and cross-repository documentation finalization
+* Validation, blockers, remaining work, and follow-up items: current; no remaining active-plan markers
+* Review readiness: ready; the full plan's declared scope has completion evidence for every marker
 
 ## Blockers
 
-* P03-T04 is waiting for GitHub Pages certificate issuance/HTTPS enforcement after the user-owned DNS update. The agent did not change DNS-provider records.
+* None. All plan markers have completion evidence.
 
 ## Remaining Work
 
-* P03-T04, P04, P04-T01, and P04-T02 remain active.
+* None. All plan markers (P01 through P04, including every `Pxx-Txx` task) have completion evidence.
 
 ## Follow-Up Items
 
@@ -183,12 +230,12 @@ Implementation started for the full plan. P01 and P02 are complete: `benarculus/
 
 ## Return-to-Caller State
 
-* Implementation execution status: Partial; DNS updated, awaiting GitHub Pages certificate issuance
-* Declared scope and markers: full plan; P01, P01-T01, P01-T02, P02, P02-T01, P02-T02, P02-T03, P03-T01, P03-T02, and P03-T03 complete; P03-T04 and later markers remain
-* Validation coverage: destination repository availability, migration boundary, destination quality checks, preview and production-mode Pages deployments, hosted preview routes, RSS/sitemap/robots/assets, Pages custom-domain handoff, and apex DNS A-record propagation checked
-* Blockers: GitHub Pages HTTPS certificate issuance is not complete; secure requests currently report a hostname mismatch
-* Current plan updates: P03-T02 records the Pages claim handoff; P03-T03 now records that apex DNS resolves to all four GitHub Pages A records and the user-owned DNS action is complete
-* Planning and critique state: current and ready for implementation
-* Follow-up items: `www.benarculus.com` redirect decision remains follow-up-only
-* Review readiness or no-handoff reason: not ready; production activation and profile repository cleanup remain incomplete
-* Continuation owner: user
+* Implementation execution status: Complete
+* Declared scope and markers: full plan; all markers (P01, P01-T01, P01-T02, P02, P02-T01, P02-T02, P02-T03, P03, P03-T01, P03-T02, P03-T03, P03-T04, P04, P04-T01, P04-T02) complete
+* Validation coverage: destination repository availability, migration boundary, destination quality checks, preview and production-mode Pages deployments, hosted preview and production routes, RSS/sitemap/robots/assets, canonical metadata, HTTP-to-HTTPS redirect, Pages custom-domain handoff, apex DNS propagation, HTTPS enforcement, profile-repository cleanup, and cross-repository documentation checked
+* Blockers: none
+* Current plan updates: P03-T04 confirms full production activation; P04-T01 confirms the profile repository is reduced to profile-only scope with GitHub Pages disabled; P04-T02 records the destination repository's new PR-required branch protection and documentation finalization
+* Planning and critique state: current; critique consumed and resolved during planning
+* Follow-up items: `www.benarculus.com` redirect decision remains follow-up-only; future destination-repository changes must go through a pull request due to the newly discovered branch-protection ruleset
+* Review readiness or no-handoff reason: ready for `/rpi-review`
+* Continuation owner: none; full plan complete
